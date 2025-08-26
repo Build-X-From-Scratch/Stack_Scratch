@@ -37,6 +37,9 @@ class Stack{
             }
             return false;
         }
+        int top(){
+            return this->array[size - 1];
+        }
         //getter
         bool is_empty(){
             if(size == 0){
@@ -76,5 +79,6 @@ int main(){
     stack1.print_stack();
     std::cout << "Kapasitas maksimal Stack: " << stack1.get_capacity() << std::endl;
     std::cout << "Size Array: " << stack1.get_size() << std::endl;
+    std::cout << "element paling atas: " << stack1.top() << std::endl;
     return 0;
 }
