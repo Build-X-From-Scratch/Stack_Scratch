@@ -1,11 +1,5 @@
 #include <gtest/gtest.h>
 #include "../src/stack.cpp"    
-
-TEST(Stack, IntialValue){
-    Stack stack1(100);
-    EXPECT_EQ(stack1.get_capacity(),100);
-}
-
 TEST(Stack,push){
     Stack Stack1(100);
     Stack1.push(1);

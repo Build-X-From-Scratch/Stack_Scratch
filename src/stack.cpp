@@ -70,6 +70,7 @@ class Stack{
             }
 
 };
+#ifndef UNIT_TEST
 int main(){
     Stack stack1(100);
     stack1.push(1);
@@ -82,3 +83,4 @@ int main(){
     std::cout << "element paling atas: " << stack1.top() << std::endl;
     return 0;
 }
+#endif UNIT_TEST
