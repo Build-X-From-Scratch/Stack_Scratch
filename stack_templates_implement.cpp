@@ -1,3 +1,14 @@
+/**
+ * @file stack_templates_implement adalah sebuah program untuk mengimplementasikan
+ * stack menggunakan templates dan array dinamis.templates bertujuan supaya stack
+ * dapat bekerja untuk semua tipe data dan array dinamis dipakai supaya stack dapat
+ * terbatas dalam static memory
+ * 
+ * @author yusuf
+ * @date august 27
+ * 
+ * @bug belum mengimplementasikan copy constructor dan copy assignment
+ */
 #include <iostream>
 #include <stdexcept>
 #include <cstddef>
@@ -118,6 +129,12 @@ class Stack{
             //salin isi temporary array dengan capacity * 2 ke arr
             arr = temp;
         }
+        /**
+         * @brief adalah method untuk mengecilkan kapasitas sebuah array dinamis
+         * 
+         * @details time complexity O(n),Space Complexity O(n)
+         * karena membutuhkan copy dari array sebelumnya
+         */
         void shrink_array(){
             type* temp = new type[capacity]
             //salin array ke temp
@@ -130,6 +147,13 @@ class Stack{
             arr = temp;
 
         }
+        /**
+         * @brief resize adalah method jika n > capacity maka array dinamis
+         * akan di perbesar hingga capacity = n,jika sebalik nya maka array akan
+         * diperkecil hinggap capacity = n
+         * 
+         * @details Time Complexity O(n),Space Complexity O(n)
+         */
         void resize(int n){
             type* temp = new type[n];
             for(size_t i = 0;i < n;i++){
