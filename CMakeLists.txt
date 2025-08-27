@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(StackProject LANGUAGES CXX)
 
-# Set standar C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -15,9 +14,6 @@ set(SOURCES
     ${SRC_DIR}/stack.cpp
 )
 
-# ---------------------------
-# Library
-# ---------------------------
 add_library(stack_lib ${SOURCES})
 target_include_directories(stack_lib PUBLIC ${SRC_DIR})
 
@@ -31,13 +27,18 @@ add_executable(stack_array_scatch stack_array_scatch.cpp)
 target_link_libraries(stack_array_scatch PRIVATE stack_lib)
 
 # ---------------------------
-# Tests (GoogleTest)
+# GoogleTest (cross-platform)
 # ---------------------------
-enable_testing()
-find_package(GTest REQUIRED)
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/release-1.15.0.zip
+)
+FetchContent_MakeAvailable(googletest)
 
+enable_testing()
 add_executable(stack_test ${TEST_DIR}/stack_test.cpp)
-target_link_libraries(stack_test PRIVATE stack_lib GTest::GTest GTest::Main)
+target_link_libraries(stack_test PRIVATE stack_lib GTest::gtest_main)
 
 add_test(NAME StackUnitTest COMMAND stack_test)
 
@@ -47,4 +48,5 @@ add_test(NAME StackUnitTest COMMAND stack_test)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(stack_lib PRIVATE -Wall -Wextra -pedantic -O2)
+    target_compile_options(stack_test PRIVATE -Wall -Wextra -pedantic -O2)
 endif()
