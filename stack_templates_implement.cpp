@@ -48,6 +48,9 @@ class Stack{
          * Time Complexity O(1),Space Complexity O(1)
          */
         void push(const type &data){
+            if(size == capacity){
+                grow_array();
+            }
             arr[size] = data;
             size++;
         }
@@ -60,6 +63,9 @@ class Stack{
         void pop(){
             arr[size - 1] = 0;
             size--;
+            if(size = capacity / 2){
+                shrink_array();
+            }
         }
         /**
          * @brief emplace adalah operasi stack yang memunkinkan kita
@@ -112,12 +118,46 @@ class Stack{
             //salin isi temporary array dengan capacity * 2 ke arr
             arr = temp;
         }
+        void shrink_array(){
+            type* temp = new type[capacity]
+            //salin array ke temp
+            for(size_t i = 0;i < size;i++){
+                temp[i] = arr[i];
+            }
+            //hapus array lama
+            delete[] arr;
+            //salin temporary array ke array lama(kosong)
+            arr = temp;
+
+        }
+        void resize(int n){
+            type* temp = new type[n];
+            for(size_t i = 0;i < n;i++){
+                temp[i] = arr[i];
+            }
+            delete[] arr;
+            arr = temp;
+        }
     public: //abstraksi print
         void print()const{
             for(size_t i = 0;i < size;i++){
                 std::cout << arr[i] << " ";
             }
             std::cout << std::endl;
+        }
+    public: //abstraksi method clear
+    /**
+     * @brief clear adalah salah satu method untuk membersihkan tumpukkan
+     * dengan method clear kita dapat menghapus semua element dalam satu tumpukkan
+     * 
+     * @details karena harus menghapus satu persatu maka
+     * time complexity O(n),Space Complexity O(1)
+     */
+        void clear(){ 
+            for(size_t i = 0;i < size;i++){
+                arr[i] = 0;
+            }
+            size = 0;
         }
 
 };

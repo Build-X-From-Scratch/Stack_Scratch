@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+# CMake FetchContent
+build/_deps/
 
 # Compiled Object files
 *.slo
