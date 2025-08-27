@@ -1,7 +1,0 @@
-/home/yusuf/Stack_Scratch/build/CMakeFiles/stack_lib.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/simple_stack.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/stack_array_scatch.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/stack_test.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/test.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/edit_cache.dir
-/home/yusuf/Stack_Scratch/build/CMakeFiles/rebuild_cache.dir
