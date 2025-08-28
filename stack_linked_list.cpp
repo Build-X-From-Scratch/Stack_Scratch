@@ -1,3 +1,15 @@
+/**
+ * @file stack_linked_list.cpp 
+ * 
+ * @brief sebuah program untuk mensimulasikan bagaimana stack bekerja 
+ * menggunakan implementasi singly linked list
+ * 
+ * @author Muh Yusuf
+ * 
+ * @date 28 august
+ * 
+ * @version 1.0
+ */
 #include <iostream>
 #include <utility>
 #include <stdexcept>
