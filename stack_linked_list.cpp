@@ -6,12 +6,11 @@
  * 
  * @author Muh Yusuf
  * 
- * @date 28 august
- * 
- * @version 1.0
+ * @date 29 august
+ *
+ * @version 2.0
  */
 #include <iostream>
-#include <utility>
 #include <stdexcept>
 template <typename type>
 class Stack{
@@ -26,17 +25,53 @@ class Stack{
     public://abstraksi constructor
         //constructor
         Stack() : head(nullptr),size(0){}
+        //copy constructor
+        Stack(const Stack& obj){
+            if(obj.head == nullptr){
+                return;
+            }
+            head = new Node(obj.head->data);
+            Node* curr = head;
+            Node* temp = obj.head->next;
+            while(temp != nullptr){
+                curr->next = new Node(temp->data);
+                curr = curr->next;
+                temp = temp->next;
+            }
+            
+        }
+        //copy assignment
+        Stack& operator=(const Stack& obj){
+            if(this == &obj){//copy diri sendiri  
+                return *this; //kembalikan object saat ini
+            }
+            clear();
+            if(obj.head == nullptr){
+                head = nullptr;
+                return *this;
+            }
+            head = new Node(obj.head->data);
+            Node* curr = head;
+            Node* temp = obj.head->next;
+            while(temp != nullptr){
+                curr->next = new Node(temp->data);
+            }
+            return *this;
+        }
+        ~Stack()noexcept{
+            clear();
+        }
     public://abstraksi getter
-        int is_size()const{
+        int is_size()const noexcept{
             return this->size;
         }
-        bool is_empty()const{
+        bool is_empty()const noexcept{
             if(size == 0){
                 return true;
             }
             return false;
         }
-        type top(Node* head)const{
+        type top(Node* head)const noexcept{
             return head->data;
         }
     public://abstraksi setter
@@ -77,6 +112,15 @@ class Stack{
         delete temp;
         size--;
     }
+    void clear() noexcept{
+        //pakai konsep deletin at beginning tp head terus di loop       
+        while(head != nullptr){
+            Node* temp = head; //node menunjuk pointer saat ini
+            head = head->next;
+            delete temp; //hapus node
+        }
+        size = 0;
+    }
     public: //abstraksi print
         void print_detail(){
             Node* curr = head;
@@ -90,10 +134,11 @@ class Stack{
 };
 int main(){
     Stack<int> stack1;
-    Stack<char> stack2;
+    Stack<int> stack2;
     stack1.push(1);
     stack1.push(2);
     stack1.push(3);
+    stack1.push(4);
     std::cout << "setelah push!" << std::endl;
     std::cout << "size stack: " << stack1.is_size() << std::endl;
     std::cout << stack1.is_empty() << std::endl;
@@ -101,5 +146,10 @@ int main(){
     stack1.pop();
     std::cout << "Pop Element" << std::endl;
     stack1.print_detail();
+
+    std::cout << "setelah copy" << std::endl;
+    stack2 = stack1;
+    stack2.print_detail();
     //stack1.pop();
+    return 0;
 } 
