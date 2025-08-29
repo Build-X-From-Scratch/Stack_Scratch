@@ -2,6 +2,8 @@
 *.d
 # CMake FetchContent
 build/_deps/
+#commic check
+node_modules/
 
 # Compiled Object files
 *.slo
