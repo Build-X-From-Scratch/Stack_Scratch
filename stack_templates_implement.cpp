@@ -13,20 +13,49 @@
 #include <stdexcept>
 #include <cstddef>
 #include <utility>
-template <typename type,std::size_t capacity>
+template <typename type>
 class Stack{
     private:
+        std::size_t capacity;
         int size;
         type* arr;
     public:
         //default constructor
         Stack(){
+            this->capacity = 1;
+            this->size = 0;
+            this->arr = new type[capacity];
+        }
+        //constructor
+        Stack(std::size_t capacity){
+            this->capacity = capacity;
             this->size = 0;
             this->arr = new type[capacity];
         }
         //destructor
         ~Stack(){
             delete[] arr;
+        }
+        //copy constructor
+        Stack(const Stack& obj){
+            size = obj.size; //supaya tiap object konsisten size yg dimiliki
+            arr = new type[capacity]; //alokasi ulang arr
+            for(size_t i = 0;i < size;i++){
+                arr[i] = obj.arr[i];
+            }   
+        }
+        Stack operator=(const Stack& obj){
+            //this disini menunjuk objek saat ini
+            if(this != obj){
+                //copy array lama ke array baru
+                delete[] arr;
+                size = obj.size;  
+                arr = new type[capacity];
+                for(size_t i = 0;i < size;i++){
+                    arr[i] = obj.arr[i];
+                }
+            }
+            return *this;
         }
     public: //abstraksi metod getter
         int get_size()const{
@@ -74,7 +103,7 @@ class Stack{
         void pop(){
             arr[size - 1] = 0;
             size--;
-            if(size = capacity / 2){
+            if(size == capacity / 2){
                 shrink_array();
             }
         }
@@ -97,7 +126,7 @@ class Stack{
         template <typename... Args>
         void emplace(Args&&... args){
             if(size == capacity){
-                std::runtime_error("stack terisi penuh");
+                throw std::runtime_error("stack terisi penuh");
              }
             new(&arr[size]) type(std::forward<Args>(args)...);
             size++;    
@@ -119,7 +148,7 @@ class Stack{
          */
         void grow_array(){
             type* temp = new type[capacity * 2];
-            capacity *= 2;
+            capacity = capacity * 2;
             //salin array ke temp
             for(size_t i = 0;i < size;i++){
                 temp[i] = arr[i];
@@ -136,7 +165,7 @@ class Stack{
          * karena membutuhkan copy dari array sebelumnya
          */
         void shrink_array(){
-            type* temp = new type[capacity]
+            type* temp = new type[capacity];
             //salin array ke temp
             for(size_t i = 0;i < size;i++){
                 temp[i] = arr[i];
@@ -186,7 +215,7 @@ class Stack{
 
 };
 int main(){
-    Stack<int,100>stack1;
+    Stack<int>stack1(100);
     stack1.push(1);
     stack1.push(2);
     stack1.push(3);
