@@ -147,8 +147,8 @@ int main(){
     std::cout << "Pop Element" << std::endl;
     stack1.print_detail();
 
-    std::cout << "setelah copy" << std::endl;
     stack2 = stack1;
+    std::cout << "setelah copy" << std::endl;
     stack2.print_detail();
     //stack1.pop();
     return 0;
