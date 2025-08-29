@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/stack_test.dir/link.d CMakeFiles/stack_test.dir/test/stack_test.cpp.o -o stack_test  libstack_lib.a /usr/lib/libgtest_main.so.1.17.0 /usr/lib/libgtest.so.1.17.0
