@@ -1,71 +1,90 @@
-name: C Testing
+name: C/C++ Build & Test
 
-on: [push, pull_request]
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
+on:
+  push:
+  pull_request:
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  TestingUtama:
-    name: c test
+  lint_format:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v4
-      - name: install requirement
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get -qq install clang-tidy clang-format
-      - name: git
-        run: |
-          git config --global user.name github-actions[bot]
-          git config --global user.email 'github-actions@users.noreply.github.com'
-      - name: format filename
-        run: |
-          wget https://raw.githubusercontent.com/bellshade/unitesting-script/main/filename_formatter.sh
-          wget https://raw.githubusercontent.com/bellshade/unitesting-script/main/markdown_formatter.sh
-          chmod +x filename_formatter.sh
-          chmod +x markdown_formatter.sh
-          ./filename_formatter.sh .c, .h
-          ./markdown_formatter.sh
-
-      - name: mengambil file yang telah dirubah
-        run: |
-          git branch
-          git diff --diff-filter=dr --name-only origin/main > git_diff.txt
-          echo "file diubah-- `cat git_diff.txt`"
-
-      - name: Konfigurasi statik lint c
-        run: cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    
-  build:
-    name: cek compile
-    runs-on: ${{ matrix.os }}
-    needs: [TestingUtama]
-    permissions:
-      pull-requests: write
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true
-      - name: build c
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+
+      - name: Install tools
         run: |
-            cmake -B ./build -S .
-            cmake --build build --parallel 4
-      - name: tambah label jika fail
-        uses: actions/github-script@v6
-        if: ${{ failure() && matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'}}
+          sudo apt-get -qq update
+          sudo apt-get -qq install clang-tidy clang-format cmake
+
+      - name: Get format scripts
+        run: |
+          wget https://raw.githubusercontent.com/bellshade/unitesting-script/main/filename_formatter.sh
+          wget https://raw.githubusercontent.com/bellshade/unitesting-script/main/markdown_formatter.sh
+          chmod +x filename_formatter.sh markdown_formatter.sh
+
+      - name: Run filename & markdown formatters
+        run: |
+          ./filename_formatter.sh .c .h .cpp .hpp
+          ./markdown_formatter.sh
+
+      - name: Configure (generate compile_commands.json)
+        run: cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Run clang-tidy on changed files
+        run: |
+          set -e
+          if git rev-parse --verify origin/main >/dev/null 2>&1; then
+            BASE_SHA="$(git merge-base HEAD origin/main)"
+          else
+            BASE_SHA="$(git rev-list --max-parents=0 HEAD | tail -n1)"
+          fi
+          CHANGED="$(git diff --diff-filter=dr --name-only "$BASE_SHA"...HEAD | grep -E '\.(c|h|cpp|hpp)$' || true)"
+          echo "Changed: $CHANGED"
+          if [ -n "$CHANGED" ]; then
+            for f in $CHANGED; do
+              echo "Tidy: $f"
+              clang-tidy "$f" --quiet -- -I./src
+            done
+          else
+            echo "No C/C++ files changed."
+          fi
+
+  build:
+    name: Build & Test
+    runs-on: ${{ matrix.os }}
+    needs: [lint_format]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure
+        run: cmake -B build -S .
+
+      - name: Build
+        run: cmake --build build --parallel 4
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Label PR when build/test failed (Ubuntu only)
+        if: ${{ failure() && matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request' }}
+        permissions:
+          issues: write
+        uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issue.addLabels({
+            await github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
