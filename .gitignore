@@ -1,3 +1,9 @@
+# Prerequisites
+*.d
+# CMake FetchContent
+build/_deps/
+#commic check
+node_modules/
 # CMake / build
 /build/
 **/build/
@@ -7,3 +13,41 @@ cmake_install.cmake
 compile_commands.json
 CTestTestfile.cmake
 Testing/
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# debug information files
+*.dwo
