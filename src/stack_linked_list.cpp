@@ -46,7 +46,7 @@ class Stack{
                 return *this; //kembalikan object saat ini
             }
             clear();
-            if(obj.head == nullptr){
+            if(!obj.head){ //obj == nullptr
                 head = nullptr;
                 return *this;
             }
@@ -55,6 +55,8 @@ class Stack{
             Node* temp = obj.head->next;
             while(temp != nullptr){
                 curr->next = new Node(temp->data);
+                curr = curr->next;
+                temp = temp->next;
             }
             return *this;
         }
@@ -125,7 +127,7 @@ class Stack{
         void print_detail(){
             Node* curr = head;
             while (curr != nullptr) {              // cek node yg sedang ditunjuk
-                std::cout << curr->data << " -> ";
+                std::cout << curr->data << " ";
                 curr = curr->next;                 // maju ke node berikutnya
             }
             std::cout << std::endl;
@@ -134,7 +136,6 @@ class Stack{
 };
 int main(){
     Stack<int> stack1;
-    Stack<int> stack2;
     stack1.push(1);
     stack1.push(2);
     stack1.push(3);
@@ -146,10 +147,16 @@ int main(){
     stack1.pop();
     std::cout << "Pop Element" << std::endl;
     stack1.print_detail();
-
-    stack2 = stack1;
+    
+    Stack<int> stack2 = stack1; //copy constructor
     std::cout << "setelah copy" << std::endl;
+    // stack2 = stack1;
     stack2.print_detail();
     //stack1.pop();
+    Stack<int>stack3;
+    stack3 = stack1;
+    std::cout << "copy assignment" << std::endl;
+    stack3.print_detail();
+    std::cin.get();
     return 0;
 } 

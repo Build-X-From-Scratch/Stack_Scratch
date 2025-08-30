@@ -34,7 +34,7 @@ class Stack{
         }
         //destructor
         ~Stack(){
-            delete[] arr;
+            clear();
         }
         //copy constructor
         Stack(const Stack& obj){
@@ -44,13 +44,13 @@ class Stack{
                 arr[i] = obj.arr[i];
             }   
         }
-        Stack operator=(const Stack& obj){
+        Stack& operator=(const Stack& obj){
             //this disini menunjuk objek saat ini
-            if(this != obj){
+            if(this != &obj){
                 //copy array lama ke array baru
                 delete[] arr;
                 size = obj.size;  
-                arr = new type[capacity];
+                   arr = new type[capacity];
                 for(size_t i = 0;i < size;i++){
                     arr[i] = obj.arr[i];
                 }
@@ -224,5 +224,9 @@ int main(){
     stack1.pop();
     stack1.print();
     std::cout << "element paling atas: " << stack1.top() << std::endl;
+    Stack<int>stack2(100);
+    stack2 = stack1;
+    stack2.print();
+
     return 0;
 }
