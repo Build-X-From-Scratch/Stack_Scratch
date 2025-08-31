@@ -50,13 +50,18 @@ class Stack{
                 head = nullptr;
                 return *this;
             }
-            head = new Node(obj.head->data);
+            //head adalah object saat ini
+            //obj adalah objek lain yang ingin di copy
+            head = new Node(obj.head->data); 
+            //isi node pertama yang menunjuk head dengan mengambil dari object lain(ingin di copy)
             Node* curr = head;
+            //pakai curr sebagai pointer penunjuk 
             Node* temp = obj.head->next;
+            //inialisasi temp sebagai pointer untuk mengerakkan obj.head(object lain)
             while(temp != nullptr){
-                curr->next = new Node(temp->data);
-                curr = curr->next;
-                temp = temp->next;
+                curr->next = new Node(temp->data); // insert node dari object lain
+                curr = curr->next; //jalankan pointer curr
+                temp = temp->next; //jalankan pointet temp
             }
             return *this;
         }
