@@ -39,10 +39,11 @@ class Stack{
         //copy constructor
         Stack(const Stack& obj){
             size = obj.size; //supaya tiap object konsisten size yg dimiliki
+            capacity = obj.capacity;
             arr = new type[capacity]; //alokasi ulang arr
             for(size_t i = 0;i < size;i++){
                 arr[i] = obj.arr[i];
-            }   
+            }     
         }
         Stack& operator=(const Stack& obj){
             //this disini menunjuk objek saat ini
