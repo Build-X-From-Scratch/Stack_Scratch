@@ -36,6 +36,13 @@ class Stack{
             }
             return false;
         }
+        private:
+            struct validation_result{
+                bool is_valid;
+                char found;
+                char expected;
+                int index_error;
+            };
         bool is_close(char bracket){
             if(bracket == '}'){
                 return true;
@@ -60,10 +67,22 @@ class Stack{
             }
             return false;
         }
+        bool is_bracket(char a)const noexcept{
+            if(a == '{' || a == '}'){
+                return true;
+            }
+            if(a == '(' || a == ')'){
+                return true;
+            }
+            if(a == '[' || a == ']'){
+                return true;
+            }
+            return false;
+        }
         std::string parser(){
             std::string res;
             for(int i = 0;i < this->s.size();i++){
-                if(isalnum(s[i])){
+                if(is_bracket(s[i])){
                     res.push_back(s[i]);
                 }
             }
@@ -92,7 +111,16 @@ class Stack{
             size--;
         }
     public: 
-        bool valid_parantheses(){
+        char get_expected(char close)const noexcept{
+            if(close == '}'){
+                return '{';
+            }
+            if(close == ')'){
+                return '(';
+            }
+                return ']';
+        }
+        validation_result valid_parantheses(){
             std::string res = parser();
             for(int i = 0;i < res.size();i++){
                 if(is_open(res[i])){
@@ -102,30 +130,34 @@ class Stack{
                 }else if(is_close(res[i])){
                     //jika kosong maka tidak ada pasangan
                     if(is_empty()){
-                        return false;
+                        return {false,' ',get_expected(arr[size - 1]),i};
                     }
                     //jika tidak matching langsung return false
                     if(!is_matching(arr[size - 1],res[i])){
-                        return false;
+                        return {false,res[i],get_expected(arr[size -1]),i};
                     }
                     //pop jika matching
                     arr[size - 1] = 0;
                     size--;
                 }
             }
-            return true;
+            return {true,'\0','\0',-1};
         }
+
     void result(){
-        if(valid_parantheses()){
-            std::cout << "Bracket valid" << std::endl;
+        validation_result res = valid_parantheses();
+        std::cout << res.is_valid << std::endl;
+        if(res.is_valid){
+            std::cout << "Bracket Is Valid " << std::endl;
         }else{
-            std::cout << "Bracket tidak valid" << std::endl;
+            std::cout << "input: " << s << std::endl;
+            std::cout << "Error: expected '" << res.expected << "' but found '" << res.found << "', at index " << res.index_error << std::endl; 
         }
 
     }        
 };  
 int main(){
-    Stack* stack1 = new Stack(100,"(a+b)");
+    Stack* stack1 = new Stack(100,"([)]");
     stack1->result();
     // Your code here
     std::cin.get();
