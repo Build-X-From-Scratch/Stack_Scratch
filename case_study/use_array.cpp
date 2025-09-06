@@ -150,7 +150,6 @@ class Stack{
 
         void result(){
             validation_result res = valid_parantheses();
-            std::cout << res.is_valid << std::endl;
             if(res.is_valid){
                 std::cout << "Bracket Is Valid " << std::endl;
             }else{
