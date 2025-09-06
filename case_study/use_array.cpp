@@ -23,6 +23,10 @@ class Stack{
             this->s = s;
             this->arr = new char[capacity];
         }
+        //destructor
+        ~Stack(){
+            delete[] arr;
+        }
     private: //method valid parantheses
         bool is_open(char bracket){
             if(bracket == '{'){
@@ -144,17 +148,17 @@ class Stack{
             return {true,'\0','\0',-1};
         }
 
-    void result(){
-        validation_result res = valid_parantheses();
-        std::cout << res.is_valid << std::endl;
-        if(res.is_valid){
-            std::cout << "Bracket Is Valid " << std::endl;
-        }else{
-            std::cout << "input: " << s << std::endl;
-            std::cout << "Error: expected '" << res.expected << "' but found '" << res.found << "', at index " << res.index_error << std::endl; 
-        }
+        void result(){
+            validation_result res = valid_parantheses();
+            std::cout << res.is_valid << std::endl;
+            if(res.is_valid){
+                std::cout << "Bracket Is Valid " << std::endl;
+            }else{
+                std::cout << "input: " << s << std::endl;
+                std::cout << "Error: expected '" << res.expected << "' but found '" << res.found << "', at index " << res.index_error << std::endl; 
+            }
 
-    }        
+        }        
 };  
 int main(){
     Stack* stack1 = new Stack(100,"([)]");
