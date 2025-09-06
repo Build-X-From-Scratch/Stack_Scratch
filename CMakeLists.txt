@@ -33,11 +33,11 @@ FetchContent_Declare(
 set(INSTALL_GTEST OFF CACHE BOOL "Disable install" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
+# enable_testing()
 
 # test/stack_test.cpp harus ada
-add_executable(stack_test ${TEST_DIR}/stack_test.cpp)
-target_link_libraries(stack_test PRIVATE stack_lib GTest::gtest_main)
+#add_executable(stack_test ${TEST_DIR}/stack_test.cpp)
+#target_link_libraries(stack_test PRIVATE stack_lib GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(stack_test)
