@@ -77,14 +77,6 @@ class Stack{
              * 
              * @return string yang berisi operasi apa saja pada sebuah string
              */
-            Mode get_operation(const std::string& text){
-                std::string ans = "";
-                std::istringstream iss(text);
-                std::string cmd;
-                iss >> cmd;
-                return classifyInput(cmd);
-                
-            }
             /**
              * @brief fungsi untuk melakukan parser terhadap string,dengan kata
              * lain memisahkan keyword(write,read,undo,dan redo) dengan string utama
@@ -135,13 +127,13 @@ class Stack{
             if(is_full()){
                 throw std::runtime_error("Stack telah penuh");
             }
-            Mode m = classifyInput(text);
+            Mode m = classifyInput(text); //harus validasi  karena menerima parameter
             if(m == write){
                 push_arr(text);
             }else{
-                Mode m = get_operation(text);
+                Mode m = classifyInput(text);
                 std::cout << "Error: " << m << " not available"  << std::endl;
-            }
+            }   
         }
         /**
          * @brief undo adalah salah satu operasi pada text editor,adapun tugas nya adalah
@@ -153,7 +145,7 @@ class Stack{
          */
         void Undo(){
                 if(is_empty()){
-                    std::runtime_error("Queue is empty");
+                    throw std::runtime_error("Queue is empty");
                 }else{
                     push_temp();
                     pop_arr();
@@ -174,27 +166,6 @@ class Stack{
             }
             std::cout << std::endl;
         }
-        public:
-            std::string input(){
-                std::string text;
-                std::cin >> text;
-                return text;
-            }
-            // void menu(const std::string& text){
-            //     Mode m = get_operation(top());  
-            //     if(m == write){
-            //         Write(text);
-            //     }else if(m == read){
-            //         Read();
-            //     }else if(m == undo){
-            //         Undo(text);
-            //     }else if(m == redo){
-            //         Redo();
-            //     }else{
-            //         Mode m = get_operation(top());
-            //         std::cout << "Error: " << m << " not available"  << std::endl;
-            //     }
-            // }
 };
 int main(){     
     Stack stack1(1024); //
