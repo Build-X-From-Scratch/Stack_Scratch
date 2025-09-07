@@ -77,13 +77,13 @@ class Stack{
              * 
              * @return string yang berisi operasi apa saja pada sebuah string
              */
-            std::string get_operation(const std::string& text){
+            Mode get_operation(const std::string& text){
                 std::string ans = "";
                 std::istringstream iss(text);
                 std::string cmd;
                 iss >> cmd;
-                Mode m = classifyInput(cmd);
-                return cmd;
+                return classifyInput(cmd);
+                
             }
             /**
              * @brief fungsi untuk melakukan parser terhadap string,dengan kata
@@ -139,8 +139,8 @@ class Stack{
             if(m == write){
                 push_arr(text);
             }else{
-                std::string operasi = get_operation(text);
-                std::cout << "Error: " << operasi << " not available"  << std::endl;
+                Mode m = get_operation(text);
+                std::cout << "Error: " << m << " not available"  << std::endl;
             }
         }
         /**
@@ -151,20 +151,15 @@ class Stack{
          * 1.push top pada arr ke temp_stack 
          * 2.pop element top pada arr
          */
-        void Undo(const std::string& text){
-            Mode m = classifyInput(top());
-            if(m == undo){
+        void Undo(){
                 if(is_empty()){
                     std::runtime_error("Queue is empty");
                 }else{
                     push_temp();
                     pop_arr();
                 }
-            }else{
-                std::string operasi = get_operation(top());   
-            }
         }
-     void Redo(){
+        void Redo(){
             if(temp_is_empty()){
                 throw std::runtime_error("tidak ada perubahan terbaru");
             }else{
@@ -185,22 +180,21 @@ class Stack{
                 std::cin >> text;
                 return text;
             }
-            void menu(const std::string& text){
-                std::string operation =  get_operation(text);
-                Mode m = classifyInput(text);
-                if(m == write){
-                    Write(text);
-                }else if(m == read){
-                    Read();
-                }else if(m == undo){
-                    Undo(text);
-                }else if(m == redo){
-                    Redo();
-                }else{
-                    std::string operasi = get_operation(top());
-                    std::cout << "Error: " << operasi << " not available"  << std::endl;
-                }
-            }
+            // void menu(const std::string& text){
+            //     Mode m = get_operation(top());  
+            //     if(m == write){
+            //         Write(text);
+            //     }else if(m == read){
+            //         Read();
+            //     }else if(m == undo){
+            //         Undo(text);
+            //     }else if(m == redo){
+            //         Redo();
+            //     }else{
+            //         Mode m = get_operation(top());
+            //         std::cout << "Error: " << m << " not available"  << std::endl;
+            //     }
+            // }
 };
 int main(){     
     Stack stack1(1024); //
@@ -209,8 +203,10 @@ int main(){
     stack1.Write("write sayang");
     stack1.Write("write kamu");
     stack1.Read(); // aku dia sayang kamu
-    stack1.Undo("undo"); // aku dia sayang
+    stack1.Undo(); // aku dia sayang ->membuang perubahan terbaru dari state
     stack1.Read();
+    stack1.Redo();
+    stack1.Read(); //aku dia sayang kamu(balik ke state awal)
     std::cin.get();
     return 0;
 }
