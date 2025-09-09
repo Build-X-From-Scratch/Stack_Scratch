@@ -68,6 +68,15 @@ class Stack{
         ~Stack()noexcept{
             clear();
         }
+        void swap(Stack& others){
+            //swap head
+            Node* tempHead = head;
+            head = others.head;
+            //swap size
+            int tempSize = size;
+            size = others.size;
+            others.size = tempSize;
+        }
     public://abstraksi getter
         int is_size()const noexcept{
             return this->size;
@@ -162,6 +171,16 @@ int main(){
     stack3 = stack1;
     std::cout << "copy assignment" << std::endl;
     stack3.print_detail();
+    Stack<int> stack4;
+    stack4.push(10);
+    stack4.push(20);
+    stack4.push(30);
+    stack4.push(40);
+    std::cout << "sebelum swap" << std::endl;
+    stack4.print_detail();
+    stack4.swap(stack1);
+    std::cout << "sesudah swap" << std::endl;
+    stack4.print_detail();
     std::cin.get();
     return 0;
 } 
