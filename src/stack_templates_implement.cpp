@@ -58,6 +58,30 @@ class Stack{
             }
             return *this;
         }
+        /**
+         * example with simple study case
+         * let a = 2,b = 3 your task swap to variable
+         * simple method use temporary variabel
+         * solution
+         * temp = a
+         * a = b
+         * b = temp
+         */
+        void swap(Stack& others){
+            //tukar capacity
+            std::size_t tempCapa = capacity;
+            capacity = others.size;
+            others.size = tempCapa;
+            //tukar size
+            int tempSize = size;
+            size = others.size;
+            others.size = tempSize;
+            //tukar array
+            type* temp = new type[capacity];
+            temp = arr;
+            arr = others.arr;
+            others.arr = temp; 
+        }
     public: //abstraksi metod getter
         int get_size()const{
             return this->size;
@@ -228,6 +252,14 @@ int main(){
     Stack<int>stack2(100);
     stack2 = stack1;
     stack2.print();
-
+    Stack<int>stack5(100);
+    stack5.push(10);
+    stack5.push(20);
+    stack5.push(30);
+    std::cout << "stack 5 sebelum swap" << std::endl;
+    stack5.print();
+    std::cout << "sesusah swapp" << std::endl;
+    stack5.swap(stack1);
+    stack5.print();
     return 0;
 }
