@@ -10,6 +10,7 @@
  *
  * @version 2.0
  */
+
 #include <iostream>
 #include <stdexcept>
 template <typename type>
